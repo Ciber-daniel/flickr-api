@@ -11,7 +11,6 @@ import { Entry } from "./interfaces/entry.interface";
 
 config({ path: resolve(__dirname, "../.env") });
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 
@@ -23,11 +22,7 @@ app.post("/api/search/flicker", async (req, res) => {
   }
 
   const data: Parameter = req.body;
-  const token = process.env.TOKEN || "MVJDQJQqjAzoA3R0idrcfqf4tK1ZCyGr";
-  const flickrApi =
-    process.env.FLICKR_API ||
-    "https://www.flickr.com/services/feeds/photos_public.gne";
-  const apiKey = process.env.API_KEY || "dcc71b7ab14be2a0b8ea5945188b8eda";
+  const token = process.env.TOKEN;
 
   const headerToken = req.headers.authorization.replace("Bearer ", "");
   // validate if header token is valid
@@ -42,10 +37,10 @@ app.post("/api/search/flicker", async (req, res) => {
   }
 
   try {
-    const url = flickrApi + `?tags=${data.tag}`;
+    const url = process.env.FLICKR_API + `?tags=${data.tag}`;
     const response = await axios.get(url, {
       headers: {
-        api_key: apiKey,
+        api_key: process.env.API_KEY,
       },
     });
 
@@ -63,6 +58,6 @@ app.post("/api/search/flicker", async (req, res) => {
 });
 
 // start the Express server
-app.listen(process.env.PORT || 8080, () => {
+app.listen(process.env.PORT, () => {
   log(`server started at http://localhost:${process.env.PORT}`);
 });
