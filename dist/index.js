@@ -49,10 +49,7 @@ app.post("/api/search/flicker", (req, res) => __awaiter(void 0, void 0, void 0, 
         return res.status(401).send("Forbidden");
     }
     const data = req.body;
-    const token = process.env.TOKEN || "MVJDQJQqjAzoA3R0idrcfqf4tK1ZCyGr";
-    const flickrApi = process.env.FLICKR_API ||
-        "https://www.flickr.com/services/feeds/photos_public.gne";
-    const apiKey = process.env.API_KEY || "dcc71b7ab14be2a0b8ea5945188b8eda";
+    const token = process.env.TOKEN;
     const headerToken = req.headers.authorization.replace("Bearer ", "");
     // validate if header token is valid
     if (headerToken !== token) {
@@ -64,10 +61,10 @@ app.post("/api/search/flicker", (req, res) => __awaiter(void 0, void 0, void 0, 
         return res.status(404).send("Bad request");
     }
     try {
-        const url = flickrApi + `?tags=${data.tag}`;
+        const url = process.env.FLICKR_API + `?tags=${data.tag}`;
         const response = yield axios_1.default.get(url, {
             headers: {
-                api_key: apiKey,
+                api_key: process.env.API_KEY,
             },
         });
         // parse the xml string to an object and return array entry
@@ -84,7 +81,7 @@ app.post("/api/search/flicker", (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 }));
 // start the Express server
-app.listen(process.env.PORT || 8080, () => {
+app.listen(process.env.PORT, () => {
     console_1.log(`server started at http://localhost:${process.env.PORT}`);
 });
 //# sourceMappingURL=index.js.map
